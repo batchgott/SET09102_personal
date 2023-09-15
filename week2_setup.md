@@ -9,30 +9,49 @@ The main requirements are to show that:
 
 ## Environment configuration
 
-Here, you should include appropriate screenshots with additional commentary. 
+The first thing that needs to be done to set up the development environment is to download or update Visual Studio. The easiest way to do that is by using the Visual Studio Installer (Fig.1).
 
-**DO**
+We also need to click on *Modify* and and add the **.NET Multi-platform App UI development (MAUI)** workload to the Visual Studio installation. 
 
-* Place your image files in the `images` folder
-* Choose your screenshots carefully so that they communicate the appropriate information.
-  Many screenshots with no clear purpose or with trivial differences are of little value.
-* Provide <ins>descriptive</ins> commentary to explain why the screenshot is included. 
-  what it shows and point out any particularly significant details.
-* Modify your screenshots - for example, by adding arrows, outlines or other highlighting 
-  techniques - to enhance their communication value.
-* Remove unnecessary material from your screenshots such as toolbars, other windows and 
-  computer desktop to eliminate distractions.
-* Ensure that any important content is clearly legible. Pay particular attention to text
-  size and image resolution.
-* Use [numbered captions](https://towardsdev.com/3-ways-to-add-a-caption-to-an-image-using-markdown-f2ca30562be6) 
-  as labels for images. Also, use the caption numbers to refer to images in your text.
+<figure>
+<img src="./images/Fig1-Visual_Studio_Installer.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.1 - Visual Studio</b></figcaption>
+</figure>
 
-**DON'T**
+<figure>
+<img src="./images/Fig2-MAUI_Workloads.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.2 - Add the MAUI workload</b></figcaption>
+</figure>
 
-* Expect the reader to understand your reasons for including a screenshot. If you can't
-  explain it, the screenshot will not do the job on its own.
-* Include self-evident comments. For example, don't simply list the values used on a
-  configuration page if those values are clearly visible in the screenshot.
+After Visual Studio is installed and up-to-date we can launch it and use the option "Clone a repository" to get started. Here we can paste the URL to our repository and clone it as can be seen in Fig.3.
+
+<figure>
+<img src="./images/Fig3-Clone_Repository.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.3 - Cloning the Repository</b></figcaption>
+</figure>
+
+
+Once the cloning is completed the IDE should open and show all the project files (Fig.4). To run the application you need to click on "Windows Machine".
+
+
+<figure>
+<img src="./images/Fig4-Run-MAUI-App.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.4 - Project files in Visual Studio</b></figcaption>
+</figure>
+
+Before the application gets started you will be prompted a window where you need to enable Developer Mode (Fig.5).
+
+<figure>
+<img src="./images/Fig5-Turn_On_Developer_Mode.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.5 - Turn on Developer Mode</b></figcaption>
+</figure>
+
+Now the MAUI App should open (Fig.6).
+
+<figure>
+<img src="./images/Fig6-MAUI_App.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.6 - MAUI App running</b></figcaption>
+</figure>
 
 ## Reflection
 
