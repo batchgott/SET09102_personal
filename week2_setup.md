@@ -12,7 +12,7 @@ We also need to click on *Modify* and and add the **.NET Multi-platform App UI d
 </figure>
 
 <figure>
-<img src="./images/Fig2-MAUI_Workloads.png" alt="Trulli" style="width:100%">
+<img src="[./images/](https://github.com/batchgott/SET09102_personal/blob/main/images/)Fig2-MAUI_Workloads.png" alt="Trulli" style="width:100%">
 <figcaption align="center"><b>Fig.2 - Add the MAUI workload</b></figcaption>
 </figure>
 
