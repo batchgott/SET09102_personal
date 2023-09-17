@@ -7,7 +7,7 @@ The first thing that needs to be done to set up the development environment is t
 We also need to click on *Modify* and and add the **.NET Multi-platform App UI development (MAUI)** workload to the Visual Studio installation (Fig.2). 
 
 <figure>
-<img src="./images/Fig1-Visual_Studio_Installer.png" alt="Trulli" style="width:100%">
+<img src="https://github.com/batchgott/SET09102_personal/blob/main/images/Fig1-Visual_Studio_Installer.png" alt="Trulli" style="width:100%">
 <figcaption align="center"><b>Fig.1 - Visual Studio</b></figcaption>
 </figure>
 
