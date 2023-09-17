@@ -1,17 +1,10 @@
 # Setup
 
-This section documents your practical work in week 2.
-
-The main requirements are to show that:
-
-1. Your development environment is correctly set up
-2. You understand the setup including potential alternative configuration settings
-
 ## Environment configuration
 
 The first thing that needs to be done to set up the development environment is to download or update Visual Studio. The easiest way to do that is by using the Visual Studio Installer (Fig.1).
 
-We also need to click on *Modify* and and add the **.NET Multi-platform App UI development (MAUI)** workload to the Visual Studio installation. 
+We also need to click on *Modify* and and add the **.NET Multi-platform App UI development (MAUI)** workload to the Visual Studio installation (Fig.2). 
 
 <figure>
 <img src="./images/Fig1-Visual_Studio_Installer.png" alt="Trulli" style="width:100%">
@@ -46,7 +39,7 @@ Before the application gets started you will be prompted a window where you need
 <figcaption align="center"><b>Fig.5 - Turn on Developer Mode</b></figcaption>
 </figure>
 
-Now the MAUI App should open (Fig.6).
+Now the MAUI App should run (Fig.6).
 
 <figure>
 <img src="./images/Fig6-MAUI_App.png" alt="Trulli" style="width:100%">
@@ -54,22 +47,17 @@ Now the MAUI App should open (Fig.6).
 </figure>
 
 ## Reflection
+#### Why MAUI
 
-For this section, decide what points are worth making and structure your content 
-appropriately.
+MAUI is a new framework from Microsoft who have a track record of build great application development tools. The purpose of MAUI is to build Cross-Platform apps with only one codebase which significantly reduces development time when we want to create an app for all platforms. MAUI solves the issue other Microsoft front-end frameworks like XAMARIN and WPF had were you could only build an app for one or two specific platforms.
 
-**DO**
+#### When would MAUI not be a good choice
+If we build an app that needs to have really good performance and also really robust it might be better to build it using native platforms like Swift for iOS or Android Studio for Android phones. Fortunately, the performance of MAUI will be sufficient for 99% of use cases.
 
-* Use sub-headings to differentiate between sections
-* Provide <ins>reflective</ins> commentary that discusses, for example, limitations of
-  your current configuration, how your configuration is appropriate for the current 
-  project, alternative configuration that might be appropriate in ther circumstances, 
-  etc.
-* Mention any difficulties you had setting up your working environment and how you 
-  resolved them
+#### Running the Application on Android instead of Windows
+As MAUI is used for Cross-Platform development we can also run and test it on other platforms like Android. To start it in an Android Environment we first need to download an Emulator in Visual Studio and then use it to start the MAUI App instead of "Windows Machine" (Fig.7).
 
-**DON'T**
-
-* Repeat the descriptive commentary from point 1
-* Give a blow-by-blow account of everything you did. Instead, you should highlight 
-  the important points.
+<figure>
+<img src="./images/Fig7-Run_in_Android_Emulator.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.7 - Run with Android</b></figcaption>
+</figure>
