@@ -15,7 +15,16 @@ The main requirements are to show that:
    * Make a pull request
 
 ## Task workflow
+To start working on a task we need to first pick one from the project backlog, move to "In Progress" click on it and assign the task to the appropriate user in the list to let the other developers know who is working on that task (Fig.1).
 
+<figure>
+<img src="./images/week3_workflow/Fig1-Pick_a_task.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.1 - Pick a task and assign to user</b></figcaption>
+</figure>
+
+
+
+___
 Here, you should use screenshots and descriptive commentary to show that the required
 have been completed successfully.
 
