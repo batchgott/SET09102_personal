@@ -15,6 +15,7 @@ The main requirements are to show that:
    * Make a pull request
 
 ## Task workflow
+#### Tasks in Github
 To start working on a task we need to first pick one from the project backlog, move to "In Progress" click on it and assign the task to the appropriate user in the list to let the other developers know who is working on that task (Fig.1).
 
 <figure>
@@ -23,6 +24,45 @@ To start working on a task we need to first pick one from the project backlog, m
 </figure>
 
 
+In the issue view you can edit the description to add more information about how the task should be completed (Fig.2). Here is a link to [the issue](https://github.com/Software-Engineering-Red/MAUI-APP/issues/1).
+
+
+<figure>
+<img src="./images/week3_workflow/Fig2-Issue-view.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.2 - Issue View</b></figcaption>
+</figure>
+
+Now, by clicking on "create a branch" in the issue a window will pop up that allows us to genereate a feature branch on which we can start working on the implementation(Fig.3).
+
+
+<figure>
+<img src="./images/week3_workflow/Fig3-Creating_a_branch.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.3 - ICreating a feature branch</b></figcaption>
+</figure>
+
+#### Working on our Branch
+
+In our local environment we can now checkout the new branch using the [Visual Studio Git Integration](https://learn.microsoft.com/en-us/visualstudio/version-control/git-with-visual-studio?view=vs-2022) or using the git bash and typing the following command.
+```bash
+git checkout MAUI#1
+```
+
+Now the implementation can start. We can use the the information found in the issue to ensure everything is developed according to the requirements.
+
+To commit stage, commit and push changes we can use the Visual Studio Git Integration or the following commands.
+
+```bash
+git add *
+git commit -m "Commit message"
+git push
+```
+
+More information about the development workflow can be found [here](https://github.com/Software-Engineering-Red/MAUI-APP/blob/master/Documentation/workflow.md).
+
+
+#### Creating a Pull Request
+
+When all the changes are implemented we need to check them against our **Definition of Done** which can be found [here](https://github.com/Software-Engineering-Red/MAUI-APP/blob/master/Documentation/workflow.md#definition-of-done-kanban).
 
 ___
 Here, you should use screenshots and descriptive commentary to show that the required
