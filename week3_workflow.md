@@ -37,7 +37,7 @@ Now, by clicking on "create a branch" in the issue a window will pop up that all
 
 <figure>
 <img src="./images/week3_workflow/Fig3-Creating_a_branch.png" alt="Trulli" style="width:100%">
-<figcaption align="center"><b>Fig.3 - ICreating a feature branch</b></figcaption>
+<figcaption align="center"><b>Fig.3 - Creating a feature branch</b></figcaption>
 </figure>
 
 #### Working on our Branch
@@ -63,6 +63,20 @@ More information about the development workflow can be found [here](https://gith
 #### Creating a Pull Request
 
 When all the changes are implemented we need to check them against our **Definition of Done** which can be found [here](https://github.com/Software-Engineering-Red/MAUI-APP/blob/master/Documentation/workflow.md#definition-of-done-kanban).
+
+Now we can open a Pull Request in Github. To do that we need to change the branch from `master` to [our feature branch](https://github.com/Software-Engineering-Red/MAUI-APP/tree/MAUI-APP%231) and click on *Compare & pull request*.(Fig.4)
+
+<figure>
+<img src="./images/week3_workflow/Fig4-Feature_Branch.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.4 - Feature Branch View</b></figcaption>
+</figure>
+
+Now the a form to create Pull Requests should open. We need to set the *base* branch (the branch we want to update with our changes) to develop and the *compare* to our feature branch. We can add a title and a description and we should also add someone as a reviewer. Once all that is configured we can click on *Create pull request*. (Fig.5)
+
+<figure>
+<img src="./images/week3_workflow/Fig5-Create_PR.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.5 - Create Pull Request</b></figcaption>
+</figure>
 
 ___
 Here, you should use screenshots and descriptive commentary to show that the required
