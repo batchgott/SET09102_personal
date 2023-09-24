@@ -1,19 +1,4 @@
 # Workflow
-
-This section documents your practical work in week 3.
-
-The main requirements are to show that:
-
-1. You know how to use the workflow tools in GitHub
-2. You have successfully carried out the required operations which are:
-   * Accept a task from the project backlog
-   * Update the task information appropriately
-   * Update the task board appropriately
-   * Complete the development task on a feature branch
-   * Commit your changes with appropriate comments
-   * Check your work against the Definition of Done (DoD)
-   * Make a pull request
-
 ## Task workflow
 #### Tasks in Github
 To start working on a task we need to first pick one from the project backlog, move to "In Progress" click on it and assign the task to the appropriate user in the list to let the other developers know who is working on that task (Fig.1).
@@ -78,36 +63,38 @@ Now the a form to create Pull Requests should open. We need to set the *base* br
 <figcaption align="center"><b>Fig.5 - Create Pull Request</b></figcaption>
 </figure>
 
-___
-Here, you should use screenshots and descriptive commentary to show that the required
-have been completed successfully.
 
-**DO**
+Now we need to wait for the reviewer to approve the PR or add comments to the code a request for clarification or updates. While the PR is in review we can move the task to the "In Review" column of the [Task Board](https://github.com/orgs/Software-Engineering-Red/projects/3/views/1). Any changes that need to be done can simply be pushed to the same branch and the PR gets updates.
 
-* Consider the layout of your content from the point of view of the reader. Many raw
-  screenshots will take up a lot of space. It may be better to adopt a different strategy
-  such as
-  * Using thumbnails with links to full-size images
-  * Combining two or more screenshots into a single image 
-  * Using partial screenshots to highlight only the important information
-  * etc.
-* Provide links to the actual objects (e.g. task, pull request, etc.) in the team project
-  in GitHub
-* Read through your work to make sure that the information comes across clearly
+Once the code is reviewed and nothing needs changes the reviewer will approve the PR (Fig.6) and we can merge the branch to `develop`. To do that we need to click on "Squash and Merge", add a appropritate commit message and click on "Confirm Squash and Merge".
 
-**DON'T**
 
-* Use humour or informal language
-* Waste space with trivial or self-evident commentary
-* Abbreviate your commentary using (e.g. by using bullet points). Your text should be in
-  the form of grammatically correct sentences.
+<figure>
+<img src="./images/week3_workflow/Fig6-PR_Approval_Message.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.6 - PR Approval Message</b></figcaption>
+</figure>
+
+
+<figure>
+<img src="./images/week3_workflow/Fig7-Squash_and_merge_PR.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.7 - Squash and Merge PR</b></figcaption>
+</figure>
+
+When the PR is merged we can consider the task as done and move it to the "Done" column in the Task Board (Fig.8).
+
+<figure>
+<img src="./images/week3_workflow/Fig8-Task_Done.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.8 - Task Done</b></figcaption>
+</figure>
+
 
 ## Reflection
+#### Process improvments
+##### Testing
+At the moment the [Definiton of Done](https://github.com/Software-Engineering-Red/MAUI-APP/blob/master/Documentation/workflow.md#definition-of-done-kanban) declares that all unit test need to pass but it does not specify how much code coverage we need for a new feature. It could make sense to go into more detail regarding the amount of unit tests.
+We might also want to think about including Integration Tests and using a [TDD](https://en.wikipedia.org/wiki/Test-driven_development) approach. That would help a lot when the system grows and gets more complicated to have a clear definition of a flow of each feature.
 
-Here, you should highlight any difficulties that you faced in completing the task, and
-how you resolved them.
+Additionally, we could add some CI/CD with Github Actions workflows that make sure all the test cases pass and the code coverage is at the correct amount.
 
-You should also briefly discuss the current process and how it could be refined or
-improved in future iterations. For example, is the DoD adequate or too onerous? Is the
-current procedure for updating the task appropriate? Is the task board configured to
-work in an intuitive way?
+##### Task Board
+The Task Board already has most of the essential columns that are needed to complete tasks properly. A column that might be usfull to add would be a "Blocked" column to indicate that someone has picked the task, is currently working on it but cannot continue due to some other task that needs to be completed first.
