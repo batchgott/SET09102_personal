@@ -1,25 +1,66 @@
 # Code review
 
-This section documents your practical work from week 4 in which you attempt a series of 
-code review challenges. For your portfolio, do the following:
+I chose the code review challenge **Play to win** to demonstrate my coding skills.
 
-1. Choose the code review challenge which best demonstrates your skills.
-2. Copy the code into your portfolio using a Markdown
-   [fenced code block](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks).
-3. Provide some descriptive commentary that identifies the problems.
-4. Show your improved version of the code in a second code block.
-5. Explain in one or more paragraphs why your solution is a good one.
+```csharp
+public string GetPlayerStatus(Player player)
+{
+    static int name = player.name;
+    
+    if (player.IsOnline) {
+        if (player.CurrentGame != null) {
+            return "Player is currently in a game";
+        } else {    // Player is waiting
+            if (player.PendingInvitations.Count > 0) {
+                return "Player has pending invitations";
+            } else {
+                return "Player is online";
+            }
+        }
+    } else {
+        return "Player is offline";
+    }
+}
+```
 
-**DO**
+#### Coding standard violations
+##### KISS
+The code contains a lot of nested if statement which makes it hard to follow the flow of the program and intruduces a lot of unnecessary complexity. 
 
-* Use grammatically correct sentences and paragraphs for your commentary.
-* Make clear reference to the code in your commentary. GitHub Markdown does not support
-  line numbers and so you need to make sure that the reader knows which line you are
-  referring to from your description.
-* Refer to recognised principles or rules when describing your solution. "I thought it
-  would be better that way" is not sufficient: you need to have specific reasons.
+##### YAGNI
+In the first line of the method there is a static name variable assigned. The variable is not used inside the bounds of the method.
 
-**DON'T**
+##### Use recognised commenting conventions
+The comment "Player is waiting" that is used above one of the if-conditions is unnecessary.
 
-* Include multiple examples. Make the decision about which example shows your best
-  work and use that one.
+___
+
+The following code snippet shows how to fix the issues described in the paragraphs above.
+
+```csharp
+public string GetPlayerStatus(Player player)
+{
+    if(!player.IsOnline) {
+        return "Player is offline";
+    }
+    if(player.CurrentGame != null) {
+        return "Player is currently in a game";
+    }
+    if (player.PendingInvitations.Count > 0) {
+        return "Player has pending invitations";
+    }
+    return "Player is online";
+}
+```
+
+#### Resolving the coding standard violations
+##### KISS
+Keeping it simple in this case means that we want to reduce the amount of nested conditional layers to decrease the complexity. Here it makes a lot of sense to use [Guard Clauses](https://en.wikipedia.org/wiki/Guard_(computer_science)) as way to make the code more readable.
+
+Guard clauses will flatten the layers of nesting because they will exit the method as soon as a condition is met and return a status.
+
+##### YAGNI
+Simply removing the unused variable will resolve this coding standard violation.
+
+##### Use recognised commenting conventions
+In this case it is feasable to remove the comment altogether as the code itself tells us what is going on. We do not need that extra information.
