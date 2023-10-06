@@ -1,14 +1,200 @@
 # Documentation
+## Applying clean code principles
+This section focuses on applying clean code principles to the code we wrote in [week 2](./week2_setup.md).
 
-This section is related to your work on clean code and documentation in week 5.
+#### Dependency Inversion Principle
+The Dependency Inversion Principle suggest that we should not depend on the specific implementation of lower level module but should instead depend on the abstraction.
 
-First, choose six rules of clean code and explain them. For each one,
+In the code from week 2 we instanciate the class `ContinentService` in the constructor. Instead we should use dependency injection of the interface so we only need to depend on the abstraction instead of the concrete service class.
 
-* Summarise the rule in your own words.
-* Provide an example from the code that you wrote in week 2 and then refined in week 4.
-* Explain how your code implements the rule. 
+##### Old Code
+```csharp
+    private IContinentService _continentService;
 
-___
+    public ContinentPage() {
+        InitializeComponent();
+        this.BindingContext = this;
+        this._continentService = new ContinentService();
+
+        Task.Run(async () => await LoadContinents());
+        txe_continent.Text = "";
+    }
+```
+
+##### Fixed Code
+```csharp
+    private IContinentService _continentService;
+
+    public ContinentPage(IContinentService continentService) {
+        InitializeComponent();
+        this.BindingContext = this;
+        this._continentService = continentService;
+
+        Task.Run(async () => await LoadContinents());
+        txe_continent.Text = "";
+    }
+```
+
+
+#### DRY
+The DRY (Don't Repeat Yourself) principle suggest that we should never write the same or similar code in two different places but instead use methods or parent classes to make the code reusable. Otherwise, if we would have to make any changes we would need to make them in several places.
+
+In this example we are using the same two lines of code at the end of both methods. To fix it we simply need to create a new private method with those two lines and call it at the bottom of the initial methods.
+
+##### Old Code
+```csharp
+private void SaveButton_Clicked(object sender, EventArgs e) {
+    if (String.IsNullOrEmpty(txe_continent.Text)) return;
+
+    if(selectedContinent == null) {
+        var continent = new Continent() { Name=txe_continent.Text};
+        continentService.AddContinent(continent);
+        continents.Add(continent);
+    } else {
+        selectedContinent.Name = txe_continent.Text;
+        continentService.UpdateContinent(selectedContinent);
+        var continent = continents.FirstOrDefault(x => x.ID == selectedContinent.ID);
+        continent.Name = txe_continent.Text;
+    }
+
+    
+    selectedContinent = null;
+    ltv_continents.SelectedItem = null;
+    txe_continent.Text = "";
+}
+
+private async void DeleteButton_Clicked(object sender, EventArgs e) {
+    if(ltv_continents.SelectedItem == null) {
+        await Shell.Current.DisplayAlert("No Continent Selected", "Select the continent you want to delete from the list", "OK");
+        return;
+    }
+
+    await continentService.DeleteContinent(selectedContinent);
+    continents.Remove(selectedContinent);
+
+    ltv_continents.SelectedItem = null;
+    txe_continent.Text = "";
+}
+```
+
+##### Fixed Code
+```csharp
+private void SaveButton_Clicked(object sender, EventArgs e) {
+    if (String.IsNullOrEmpty(txe_continent.Text)) return;
+
+    if(selectedContinent == null) {
+        var continent = new Continent() { Name=txe_continent.Text};
+        continentService.AddContinent(continent);
+        continents.Add(continent);
+    } else {
+        selectedContinent.Name = txe_continent.Text;
+        continentService.UpdateContinent(selectedContinent);
+        var continent = continents.FirstOrDefault(x => x.ID == selectedContinent.ID);
+        continent.Name = txe_continent.Text;
+    }
+
+    
+    selectedContinent = null;
+    
+    SetContinentSelectionNull();
+}
+
+private async void DeleteButton_Clicked(object sender, EventArgs e) {
+    if(ltv_continents.SelectedItem == null) {
+        await Shell.Current.DisplayAlert("No Continent Selected", "Select the continent you want to delete from the list", "OK");
+        return;
+    }
+
+    await continentService.DeleteContinent(selectedContinent);
+    continents.Remove(selectedContinent);
+
+    SetContinentSelectionNull();
+}
+
+private void SetContinentSelectionNull() {
+    ltv_continents.SelectedItem = null;
+    txe_continent.Text = "";
+}
+```
+
+
+
+#### Single Responsibility Principle
+The Single Responsibility Principle suggest that one thing should only be responsibly to do one task (have responsibility). That means a class or object should only do one thing but that thing well.
+
+In our code from week 2 we can see that our `ContinentService` sets up a new `SQLiteAsyncConnection` every time it does an operation. The ContinentService should not be responsible for creating the database connection. Instead, we should inject the database connection as a singleton into the constructor of the service and make it reusable but give the responsibility of establishing the connection to someone else.
+
+##### Old Code
+```csharp
+public class ContinentService : IContinentService
+{
+    private SQLiteAsyncConnection _dbConnection;
+
+    private async Task SetUpDb() {
+        if (_dbConnection != null)
+            return;
+        
+
+        _dbConnection = new SQLiteAsyncConnection(DatabaseSettings.DBPath, DatabaseSettings.Flags);
+        await _dbConnection.CreateTableAsync<Continent>();
+    }
+
+    public async Task<int> AddContinent(Continent continent) {
+        await SetUpDb();
+        return await _dbConnection.InsertAsync(continent);
+         
+    }
+
+    ...
+}
+```
+
+##### Fixed Code
+```csharp
+public class ContinentService : IContinentService
+{
+    private SQLiteAsyncConnection _dbConnection;
+
+    public ContinentService(SQLiteAsyncConnection dbConnection) {
+        _dbConnection = dbConnection;
+        await _dbConnection.CreateTableAsync<Continent>();
+    }
+
+    public async Task<int> AddContinent(Continent continent) {
+        return await _dbConnection.InsertAsync(continent);
+    }
+
+    ...
+}
+```
+
+#### Naming Convention
+It is important to have clear and consitent naming conventions for variables, methods, classes and interfaces. If we name everything correctly other programmers can orient themselve better in our codebase.
+
+In our code from week two we have a private variable `selectedContinent`. It is almost the correct name but in C# it is [convention](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names#camel-case) to name private variables with an prefix underscore.
+
+##### Old Code
+```csharp
+public partial class ContinentPage : ContentPage {
+
+    private Continent selectedContinent = null;
+
+    ...
+}
+```
+
+##### Fixed Code
+```csharp
+public partial class ContinentPage : ContentPage {
+
+    private Continent _selectedContinent = null;
+
+    ...
+}
+```
+
+
+
 ## Doxygen comments
 For automatic code documentation we can add [Doxygen](https://www.doxygen.nl/) comments to our code.
 
@@ -133,6 +319,13 @@ Similar to the examples above we do not need any comments to make the reader und
 ```
 
 ___
+This section is related to your work on clean code and documentation in week 5.
+
+First, choose six rules of clean code and explain them. For each one,
+
+* Summarise the rule in your own words.
+* Provide an example from the code that you wrote in week 2 and then refined in week 4.
+* Explain how your code implements the rule. 
 
 Second, copy the doxygen comments from your code into your portfolio and provide some 
 descriptive commentary on their purpose and structure. Use screenshots showing the HTML 
