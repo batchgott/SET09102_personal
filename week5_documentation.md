@@ -193,7 +193,110 @@ public partial class ContinentPage : ContentPage {
 }
 ```
 
+#### Exception Handling
+We need to make use of exception handling for critical operations that can throw exception. If we do not use excpetion handling the software could crash unexpectedly when the user does and operation and that leads to bad UX.
 
+In our code from week two we could make use of exception handling when deleting a continent to make sure the application does not crash if the continent that the user wants to delete does not exist anymore because someone else has already deleted it.
+
+
+##### Old Code
+```csharp
+    private async void DeleteButton_Clicked(object sender, EventArgs e) {
+        if(ltv_continents.SelectedItem == null) {
+            await Shell.Current.DisplayAlert("No Continent Selected", "Select the continent you want to delete from the list", "OK");
+            return;
+        }
+
+        await continentService.DeleteContinent(selectedContinent);
+        continents.Remove(selectedContinent);
+
+        ltv_continents.SelectedItem = null;
+        txe_continent.Text = "";
+    }
+```
+
+##### Fixed Code
+```csharp
+    private async void DeleteButton_Clicked(object sender, EventArgs e) {
+        if(ltv_continents.SelectedItem == null) {
+            await Shell.Current.DisplayAlert("No Continent Selected", "Select the continent you want to delete from the list", "OK");
+            return;
+        }
+        try {
+        await continentService.DeleteContinent(selectedContinent);
+        continents.Remove(selectedContinent);
+        } catch(Exception e) {
+            await Shell.Current.DisplayAlert("Continent does not exist", "Someone else has already deleted the continent", "OK");
+        }
+
+        ltv_continents.SelectedItem = null;
+        txe_continent.Text = "";
+    }
+```
+
+#### Long functions
+Long functions is a code smell that arises when a functions is too long and does too many things. When we code too long functions it can be hard for other softwar engineers that read our code to understand what is going on.
+
+In our code from week two we wrote the function `SaveButton_Clicked` which is very long whith a lot of things going on. To remove the code smell we can simply put parts of the method into other private methods and just call them from the `SaveButton_Clicked` method.
+
+##### Old Code
+```csharp
+    private void SaveButton_Clicked(object sender, EventArgs e) {
+        if (String.IsNullOrEmpty(txe_continent.Text)) return;
+
+        if(selectedContinent == null) {
+            var continent = new Continent() { Name=txe_continent.Text};
+            continentService.AddContinent(continent);
+            continents.Add(continent);
+        } else {
+            selectedContinent.Name = txe_continent.Text;
+            continentService.UpdateContinent(selectedContinent);
+            var continent = continents.FirstOrDefault(x => x.ID == selectedContinent.ID);
+            continent.Name = txe_continent.Text;
+        }
+
+        
+        selectedContinent = null;
+        ltv_continents.SelectedItem = null;
+        txe_continent.Text = "";
+    }
+```
+
+##### Fixed Code
+```csharp
+
+private void SaveButton_Clicked(object sender, EventArgs e) {
+    if (String.IsNullOrEmpty(txe_continent.Text)) return;
+
+    if(selectedContinent == null) {
+        CreateContinent();
+    } else {
+        UpdateContinent();
+    }
+
+    SetContinentSelectionNull();
+}
+
+private void SetContinentSelectionNull() {
+    ltv_continents.SelectedItem = null;
+    txe_continent.Text = "";
+}
+
+private void CreateContinent()
+{
+    var continent = new Continent() { Name=txe_continent.Text};
+    continentService.AddContinent(continent);
+    continents.Add(continent);
+}
+
+private void UpdateContinent()
+{
+    selectedContinent.Name = txe_continent.Text;
+    continentService.UpdateContinent(selectedContinent);
+    var continent = continents.FirstOrDefault(x => x.ID == selectedContinent.ID);
+    continent.Name = txe_continent.Text;
+}
+```
 
 ## Doxygen comments
 For automatic code documentation we can add [Doxygen](https://www.doxygen.nl/) comments to our code.
@@ -228,6 +331,13 @@ Briefly describes what the interface is for, what the methods should do and what
    }
 ```
 
+In Fig.1 you can see what the html documentation output for the interface looks like.
+
+<figure>
+<img src="./images/week5_documentation/Fig1-Interface-doxygen-html.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.1 - HTML documentation for an interface</b></figcaption>
+</figure>
+
 #### Class
 Similar to the interface the comments briefly describe what the class is for. Additionally to comments over methods we also have comments over variables to describe what they are for.
 ```csharp
@@ -256,6 +366,13 @@ public class ContinentService : IContinentService
 ...
 }
 ```
+
+In Fig.2 you can see what the html documentation output for the class looks like.
+
+<figure>
+<img src="./images/week5_documentation/Fig2-Class-doxygen-html.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.2 - HTML documentation for a class</b></figcaption>
+</figure>
 
 ## Clean Code
 Here are some examples of clean code that do not require any comments because the code itself is descriptive enought.
@@ -317,20 +434,3 @@ Similar to the examples above we do not need any comments to make the reader und
         Task<int> UpdateContinent(Continent continent);
     }
 ```
-
-___
-This section is related to your work on clean code and documentation in week 5.
-
-First, choose six rules of clean code and explain them. For each one,
-
-* Summarise the rule in your own words.
-* Provide an example from the code that you wrote in week 2 and then refined in week 4.
-* Explain how your code implements the rule. 
-
-Second, copy the doxygen comments from your code into your portfolio and provide some 
-descriptive commentary on their purpose and structure. Use screenshots showing the HTML 
-content that is generated from your code to illustrate your explanation.
-
-Finally, highlight three examples from your code where you have eliminated the need
-for comments by adhering to the principles of clean code.
- 
