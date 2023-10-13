@@ -3,36 +3,40 @@
 We want to create unit tests to test the methods of the `GameRepository` class. (The code snippet is not showing the whole class, it only shows the part that is discussed in the portfolio)
 
 ```csharp
-    public class GameRepository
+public partial class GamePage : ContentPage
+{
+    ...
+
+        /*!
+	 * Uses the GameType to select a word from the list by its length:
+	 * Easy : length < 7
+	 * Medium : 7 <= length < 10
+	 * Hard : length >= 10
+	 */
+    private string SelectWord(string gameType)
     {
-        string _dbPath;
-        private SQLiteConnection conn;
+        using var stream = FileSystem.OpenAppPackageFileAsync("wordList.txt").Result;
+        using var reader = new StreamReader(stream);
 
-        public GameRepository(string dbPath)
+        var contents = reader.ReadToEnd();
+        var words = contents.Split("\n");
+        if (gameType == "Easy")
         {
-            _dbPath = dbPath;
+            words = words.Where(word => word.Length < 7).ToArray();
         }
-
-        public void Init()
+        if (gameType == "Medium")
         {
-            conn = new SQLiteConnection(_dbPath);
-            conn.CreateTable<Game>();
+            words = words.Where(word => word.Length >= 7 && word.Length < 10).ToArray();
         }
-
-        public void Add(Game game)
+        if (gameType == "Hard")
         {
-            Init();
-            conn.Insert(game);
+            words = words.Where(word => word.Length >= 10).ToArray();
         }
-
-        public void Delete(int id)
-        {
-            Init();
-            conn.Delete<Game>(id);
-        }
-
-        ...
+        return randomElement(words);
     }
+
+    ...
+}
 ```
 
 The GameRepository is used to interact with an SQLite database. It has methods for initializing the database, adding new game data to the database, and deleting game data. The **Init** method sets up a connection to the database and creates a table to store game data. The **Add** method inserts a new game record into the database, and the **Delete** method removes a game record by its ID. This class simplifies the process of managing game-related data in a SQLite database for a mobile app.
