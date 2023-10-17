@@ -67,8 +67,42 @@ Important in this unit tests are the `Asserts`. Asserts make sure that the state
 We also expect the word to be within the given boundaries which is why we are using the `True` assertion to test for that condition.
 
 
-### Mocking
-Mocking is used in unit tests to isolate code by creating fake versions of external components. These mocks allow us to control how these external components behave during testing, to ensure that the tests focus on the specific part of the code under examination while simulating different scenarios. This makes the unit tests more reliable and consistent.
+#### Throws Null Reference Exception when GameType is Null Test
+This is a very simple test that just makes sure the correct exception is thrown when someone provides the wrong value to the `SelectWord` method.
 
-Specifically in the unit tests we wrote for the `SelectWord` method we do not need to use mocking as we do not rely on any external objects.
+Here we are using `null` as the input value for the gamemode. We expect that a `NullReferenceException` is thrown therefore we are using the `Assert.Throws<NullReferenceException>` method.
 
+```csharp
+[Fact]
+public void SelectWordThrowsNullReferenceExceptionWhenGameTypeIsNullTest()
+{
+    var gamePage = new GamePage("Easy");
+
+    Assert.Throws<NullReferenceException>(() => gamePage.SelectWord(null));
+}
+```
+
+### Reflection
+#### DRY
+Most of the unit tests are instantiate a new object of `GamePage` which violates the **DRY** (Don't repeat yourself) principle. Even though this portfolio entry is about testing we should still maintain a high standard of code quality.
+To avoid having to instantiate the class over and over again we can make use of a setup method that runs before every unit test and creates the `GamePage` object. With the `xUnit` this is very simple as the constructor of the test class [functions as the setup method](https://xunit.net/docs/shared-context).
+We would have to make the below changes to have our code comply with the DRY principle:
+
+```csharp
+    public class GamePageTests
+    {
+        private GamePage _gamePage;
+
+        public GamePageTests() {
+            _gamePage = new GamePage("Easy");
+        }
+
+        [Fact]
+        public void SelectWordThrowsNullReferenceExceptionWhenGameTypeIsNullTest()
+        {
+            Assert.Throws<NullReferenceException>(() => _gamePage.SelectWord(null));
+        }
+    }
+```
+
+Now we can remove the creation of the `GamePage` in all methods and simply use the one we instantiate in the constructor (setup method).
