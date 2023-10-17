@@ -43,6 +43,9 @@ The method takes a string `gameType` as input and returns a randomly selected wo
 If the gameType is "Easy" a word with the length less than 7 characters will be randomly selected. For "Medium" the randomly selected word will have between 7 and 9 characters and for "Hard" the word will be at least 10 characters long.
 
 ### Unit Tests
+
+We are using the [xUnit](https://xunit.net/) library to write our unit tests.
+
 #### Returns Valid Word Test
 This unit test tests the main functionality of the `SelectWord` method. For this test instead of the attribute `Fact` we are using `Theory`. This attribute allows us to define `InlineData` for the unit test which means we can provide different sets of data for multiple runs.
 
