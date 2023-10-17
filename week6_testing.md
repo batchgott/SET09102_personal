@@ -1,6 +1,6 @@
 # Testing
 
-We want to create unit tests to test the methods of the `GameRepository` class. (The code snippet is not showing the whole class, it only shows the part that is discussed in the portfolio)
+We want to create unit tests to test the method `SelectWord` of the `GameRepository` class in the [test_battles Repository](https://github.com/Software-Engineering-Red/test_battles). The code snippet below shows the method.
 
 ```csharp
 public partial class GamePage : ContentPage
@@ -39,62 +39,36 @@ public partial class GamePage : ContentPage
 }
 ```
 
-The GameRepository is used to interact with an SQLite database. It has methods for initializing the database, adding new game data to the database, and deleting game data. The **Init** method sets up a connection to the database and creates a table to store game data. The **Add** method inserts a new game record into the database, and the **Delete** method removes a game record by its ID. This class simplifies the process of managing game-related data in a SQLite database for a mobile app.
+The method takes a string `gameType` as input and returns a randomly selected word from the `wordList.txt` file.
+If the gameType is "Easy" a word with the length less than 7 characters will be randomly selected. For "Medium" the randomly selected word will have between 7 and 9 characters and for "Hard" the word will be at least 10 characters long.
 
-### Unit tests
+### Unit Tests
+#### Returns Valid Word Test
+This unit test tests the main functionality of the `SelectWord` method. For this test instead of the attribute `Fact` we are using `Theory`. This attribute allows us to define `InlineData` for the unit test which means we can provide different sets of data for multiple runs.
+
+In this unit test three sets of `InlineData` are provided which means the unit test will run three times, once for every gamemode. Additionally to providing the gamemode the inline data also contains the boundaries for the word that should be returned. If the word is not within that boundaries the test will fail.
 
 ```csharp
-using System.Collections.Generic;
-using Moq;
-using Xunit;
-
-public class GameRepositoryTests
+[Theory]
+[InlineData("Easy", 0, 7)]
+[InlineData("Medium", 7, 10)]
+[InlineData("Hard", 10, int.MaxValue)]
+public void SelectWordReturnsValidWordTest(string gameType, int minBound, int maxBound)
 {
-    private Mock<SQLiteConnection> mockConnection;
-    private GameRepository gameRepository;
+    var gamePage = new GamePage(gameType);
+    var selectedWord = gamePage.SelectWord(gameType);
 
-    public GameRepositoryTests()
-    {
-        mockConnection = new Mock<SQLiteConnection>("mock.db");
-        gameRepository = new GameRepository(dbPath);
-
-        typeof(GameRepository)
-        .GetField("conn", BindingFlags.NonPublic | BindingFlags.Instance)
-        .SetValue(repository, mockConnection.Object);
-    }
-
-    [Fact]
-    public void TestAdd_InsertGameIntoDatabase()
-    {
-        var game = new Game { Type = GameOperation.Addition, Score = 20 };
-
-        repository.Add(game);
-        mockConnection.Verify(conn => conn.Insert(game), Times.Once);
-    }
-
-    [Fact]
-    public void TestDelete_RemoveGameFromDatabase()
-    {
-        var gameId = 1;
-
-        repository.Delete(gameId);
-        mockConnection.Verify(conn => conn.Delete<Game>(gameId), Times.Once);
-    }
+    Assert.NotNull(selectedWord);
+    Assert.True(selectedWord.Length >= minBound && selectedWord.Length < maxBound);
 }
 ```
 
-There is a few things going on in this code snippet so let us break it down bit by bit.
+Important in this unit tests are the `Asserts`. Asserts make sure that the state at the end of the test is what we expect. In this case we expect `selectedWord` not to be null, hence we are using the `NotNull` assertion.
+We also expect the word to be within the given boundaries which is why we are using the `True` assertion to test for that condition.
 
-#### Mocking
+
+### Mocking
 Mocking is used in unit tests to isolate code by creating fake versions of external components. These mocks allow us to control how these external components behave during testing, to ensure that the tests focus on the specific part of the code under examination while simulating different scenarios. This makes the unit tests more reliable and consistent.
 
-Specifically in this example we are creating a mock for `SQLiteConnection` as we do not want to test this class, we just want to use it to test our methods.
+Specifically in the unit tests we wrote for the `SelectWord` method we do not need to use mocking as we do not rely on any external objects.
 
-#### Reflection
-The `SQLiteConnection` in the `GameRepository` is set to private and there is no public setter which means we need to make use of one of C#'s more advanced features called [Reflection](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/reflection-and-attributes/).
-
-With Reflection we can use the `GetField` method to search for a field with the name "conn" inside of the type `GameRepository`. Additionally we are providing the flags `BindingFlags.NonPublic` and `BindingFlags.Instance` to specify the search to non-public fields that are not static.
-With `.SetValue(repository, mockConnection.Object)` we effectivly inject the `mockConnection` into the `GameRepository` instance so that it uses the mock instead of creating a real `SQLiteConnection`.
-
-#### Testing with *Verify*
-In the unit tests we make use of the `Verify` method of a mock to ensure the `Add` and `Delete` method of the `SQLiteConnection` have been called once. If the methods are not called or are called more than once the tests will fail. 
