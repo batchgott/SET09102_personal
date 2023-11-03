@@ -146,11 +146,48 @@ MAUI has a feature that lets us do exactly that. Its the `IValueConverter` inter
 It converts a bool to the string "Available" or "Not Available" and also converts the string back to a bool. In the view we can use it in combination with databinding like this:
 
 <figure>
-<img src="./images/week9_project/Fig2-databinding-with-ivalueconverter.png" alt="Trulli" style="width:100%">
+<img src="./images/week9_project/Fig1-databinding-with-ivalueconverter.png" alt="Trulli" style="width:100%">
 <figcaption align="center"><b>Fig.1 - Databinding with the IValueConverter</b></figcaption>
 </figure>
 
 Fig.1 shows how we can declare the ValueConverter at the top as a resource and later use is for the databound Availability property.
+
+## Code review
+In the code review I got the following comments about my code:
+
+ADD COMMENT 1 HERE
+
+ADD COMMENT 2 HERE
+
+### Fixing the Databinding Error
+After some investigation in the code I was able to find out that the error was caused by one single line. It was the same issue for every view. The Bindingcontext of the page was set to `this` but it needs to be set to a new instance of the Model class so the view knows about its properties.
+
+More information about the fix can be found in the **Reflection** part of this portfolio entry.
+
+### Making code more readable
+Often times it is not a good idea to write code that is as short as possible. It might be clear for the person writing the code but it is not for other people that read it like the code reviewer in this case.
+So to fix this issue we can simply add a guard clause with a condition that checks for the datatype:
+
+```csharp
+    public class BoolToAvailabilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is not bool) 
+                return "Not Available";
+
+            return (bool) value ? "Available" : "Not Available";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is not string)
+                return false;
+
+            return (string) value == "Available" ? true : false;
+        }
+    }
+```
 
 
 ## Reflection
@@ -161,8 +198,8 @@ A lot of code quality improvements happened in this weeks portfolio entry. First
 Another thing to add to the reflection is some issue that were fixed in the view. So far there were a lot of databinding issues that we did not know how to resolve. It caused the following error for every entity that was displayed in the view:
 
 <figure>
-<img src="./images/week9_project/Fig2-view-errors.png" alt="Trulli" style="width:100%">
-<figcaption align="center"><b>Fig.2 - Errors in the view</b></figcaption>
+<img src="./images/week9_project/Fig4-view-errors.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.4 - Errors in the view</b></figcaption>
 </figure>
 
 It turns out that it is actually quite an easy fix. In the page classes, instead of setting the `BindingContext` to `this`, we had to set it to a new instance of the model class that we are using so the view knows its properties.
@@ -189,20 +226,9 @@ Another thing that could make sense to try in future weeks is the [Two-way Bindi
 
 ___
 
-In week 9, you are continuing with the team project. Your portfolio entry should 
-demonstrate how your software engineering practice is improving. It should include
-much the same content as last week's:
 
-* A descriptive summary of the issue that you worked on.
-* Snippets from your code with commentary showing how you have used good software design 
-  practice.
 * A descriptive summary of the test code that you have written.
 * A reflective summary of any changes that were requested during the code review along 
   with your fixes.
 * A descriptive summary of any issues you found with the code that you were asked to review.
-* A general reflective section that identifies, for example,
-  * New things you have realised this week
-  * Common problems that can arise in a team development situation
-  * How your practice compares to other people's
-  * etc.
 
