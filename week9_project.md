@@ -152,17 +152,37 @@ It converts a bool to the string "Available" or "Not Available" and also convert
 
 Fig.1 shows how we can declare the ValueConverter at the top as a resource and later use is for the databound Availability property.
 
+## Reviewing code
+I was asked to conduct a code review for this [PR](https://github.com/Software-Engineering-Red/MAUI-APP/pull/113). I found the following issues in the code (Fig.2):
+
+<figure>
+<img src="./images/week9_project/Fig2-comments-on-pr.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.2 - Comments on PR</b></figcaption>
+</figure>
+
+
+The comments are mainly about not violating the DRY and the SRP principle by using abstract base classes or splitting a long method into multiple sub-methods.
+
+
 ## Code review
 In the code review I got the following comments about my code:
 
-ADD COMMENT 1 HERE
-
-ADD COMMENT 2 HERE
+<figure>
+<img src="./images/week9_project/Fig3-pr-comment-1-png.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.3 - First comment of Code Review</b></figcaption>
+</figure>
 
 ### Fixing the Databinding Error
 After some investigation in the code I was able to find out that the error was caused by one single line. It was the same issue for every view. The Bindingcontext of the page was set to `this` but it needs to be set to a new instance of the Model class so the view knows about its properties.
 
 More information about the fix can be found in the **Reflection** part of this portfolio entry.
+
+
+<figure>
+<img src="./images/week9_project/Fig4-pr-comment-2-png.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.4 - Second comment of Code Review</b></figcaption>
+</figure>
+
 
 ### Making code more readable
 Often times it is not a good idea to write code that is as short as possible. It might be clear for the person writing the code but it is not for other people that read it like the code reviewer in this case.
@@ -198,8 +218,8 @@ A lot of code quality improvements happened in this weeks portfolio entry. First
 Another thing to add to the reflection is some issue that were fixed in the view. So far there were a lot of databinding issues that we did not know how to resolve. It caused the following error for every entity that was displayed in the view:
 
 <figure>
-<img src="./images/week9_project/Fig4-view-errors.png" alt="Trulli" style="width:100%">
-<figcaption align="center"><b>Fig.4 - Errors in the view</b></figcaption>
+<img src="./images/week9_project/Fig5-view-errors.png" alt="Trulli" style="width:100%">
+<figcaption align="center"><b>Fig.5 - Errors in the view</b></figcaption>
 </figure>
 
 It turns out that it is actually quite an easy fix. In the page classes, instead of setting the `BindingContext` to `this`, we had to set it to a new instance of the model class that we are using so the view knows its properties.
@@ -223,12 +243,3 @@ public partial class TeamMemberPage : ContentPage
 XAML and MAUI have a lot of feature that make leave a lot easier if used correctly. For example the `IValueConvert` for the TeamMember availability that I created this week helps a lot for displaying data accuratly in the view without having to transform it every time.
 
 Another thing that could make sense to try in future weeks is the [Two-way Binding](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/data-binding/binding-mode#two-way-bindings). That would be especially convenient when updating values of an entity without having to call an extra method.
-
-___
-
-
-* A descriptive summary of the test code that you have written.
-* A reflective summary of any changes that were requested during the code review along 
-  with your fixes.
-* A descriptive summary of any issues you found with the code that you were asked to review.
-
